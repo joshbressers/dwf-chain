@@ -1,3 +1,5 @@
+#!/bin/env python
+
 import unittest
 import dwf_chain
 
