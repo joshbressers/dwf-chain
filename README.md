@@ -22,3 +22,21 @@ ID ----> ID ----> ID
           \        -> Data
            -> Data
 
+Every block can have multiple children. We can have a system where every
+vuln type has a "root" block that's tied to the primary chain. Then every
+vuln database is part of its own chain. Every block can multiple children
+
+For example
+
+CVE-1 -> child metadata -> more metadata
+ |   \
+ |    \ --- child metadata
+ v
+CVE-2
+
+Everything can be easily traced back to the root block for verification
+
+Maybe do something clever with signatures to specify which bits of metadata
+are associated wtih a specific group or person
+
+Store the public keys in a different tree
