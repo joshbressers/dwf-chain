@@ -6,6 +6,12 @@ import vuln_chain
 
 class TestBlock(unittest.TestCase):
 
+    def setUp(self):
+
+        self.hash = "ec81332e528ff522bfb05e93cd826c075ec26c5b9cc5bfcf7087d6f28da90e1d4f44df2a9af32573df5ab535d4b985731001c71d9f7629170518bba95280ef3d"
+
+        self.the_block = vuln_chain.Block('id', 0, 'prev_hash', self.hash)
+
     def test_create(self):
         the_block = vuln_chain.Block('id', 0, 'prev_hash', 'hash')
 
@@ -16,23 +22,17 @@ class TestBlock(unittest.TestCase):
 
     def test_hash(self):
 
-        hash = "ec81332e528ff522bfb05e93cd826c075ec26c5b9cc5bfcf7087d6f28da90e1d4f44df2a9af32573df5ab535d4b985731001c71d9f7629170518bba95280ef3d"
+        output = self.the_block.gen_hash()
 
-        the_block = vuln_chain.Block('id', 0, 'prev_hash')
-        output = the_block.gen_hash()
-
-        self.assertEqual(output, hash, "Should be '%s'" % hash)
+        self.assertEqual(output, self.hash, "Should be '%s'" % self.hash)
 
     def test_verify(self):
 
-        hash = "ec81332e528ff522bfb05e93cd826c075ec26c5b9cc5bfcf7087d6f28da90e1d4f44df2a9af32573df5ab535d4b985731001c71d9f7629170518bba95280ef3d"
-
-        the_block = vuln_chain.Block('id', 0, 'prev_hash', hash)
-
-        self.assertTrue(the_block.verify())
+        self.assertTrue(self.the_block.verify())
 
         the_block = vuln_chain.Block('id', 0, 'prev_hash', 'bad_hash')
         self.assertFalse(the_block.verify())
+
 
 if __name__ == '__main__':
     unittest.main()
