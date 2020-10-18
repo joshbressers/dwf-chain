@@ -1,7 +1,9 @@
 #!/bin/env python
 
 import unittest
+
 import vuln_chain
+import time
 
 
 class TestBlock(unittest.TestCase):
@@ -33,6 +35,53 @@ class TestBlock(unittest.TestCase):
         the_block = vuln_chain.Block('id', 0, 'prev_hash', 'bad_hash')
         self.assertFalse(the_block.verify())
 
+    def test_next(self):
+
+        the_block = self.the_block
+        the_time = time.time()
+
+        the_block.add_next('id2', the_time)
+
+        next_block = the_block.get_next()
+
+        self.assertTrue(next_block.verify())
+
+    def test_prev(self):
+
+        the_block = self.the_block
+        the_time = time.time()
+
+        the_block.add_next('id2', the_time)
+
+        next_block = the_block.get_next()
+
+        self.assertEqual(next_block.get_prev(), the_block)
+
+    def test_data(self):
+
+        the_block = self.the_block
+        the_time = time.time()
+
+        next_block = the_block.add_next('id2', the_time, data = "Secret data")
+
+        self.assertTrue(next_block.verify())
+
+    def test_verify_chain(self):
+
+        the_block = self.the_block
+        the_time = time.time()
+
+        second_block = the_block.add_next('id2', the_time, data = "Secret data2")
+        third_block = second_block.add_next('id3', the_time, data = "Secret data3")
+
+
+        self.assertTrue(second_block.verify())
+        self.assertTrue(third_block.verify())
+        self.assertTrue(third_block.verify(all=True))
+
+        second_block.id = "bad_id"
+        self.assertFalse(second_block.verify())
+        self.assertFalse(third_block.verify(all=True))
 
 if __name__ == '__main__':
     unittest.main()
