@@ -83,6 +83,25 @@ class TestBlock(unittest.TestCase):
         self.assertFalse(second_block.verify())
         self.assertFalse(third_block.verify(all=True))
 
+    def test_child(self):
+
+        the_block = self.the_block
+        the_time = time.time()
+
+        second_block = the_block.add_next('id2', the_time, data = "Secret data2")
+        third_block = second_block.add_next('id3', the_time, data = "Secret data3")
+
+        second_child = second_block.add_child("id_child2", the_time, data = "child data")
+        third_child = third_block.add_child("id_child3", the_time, data = "child data")
+
+
+        self.assertTrue(second_block.verify())
+        self.assertTrue(third_block.verify())
+        self.assertTrue(third_block.verify(all=True))
+
+        self.assertIn(second_child, second_block.get_children())
+        self.assertIn(third_child, third_block.get_children())
+
 if __name__ == '__main__':
     unittest.main()
 

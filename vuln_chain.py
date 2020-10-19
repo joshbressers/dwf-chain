@@ -12,6 +12,7 @@ class Block:
         self.previous_hash = previous
         self.hash = hash
         self.calculated_hash = None
+        self.children = []
 
         self.prev = None
         self.next = None
@@ -57,6 +58,9 @@ class Block:
 
             current_block = self
 
+            # We can't use recursion here because if we have to traverse
+            # thousands of blocks, we will end up with a stack overflow
+            # error
             while(True):
                 if current_block.verify() is False:
                     break;
@@ -84,6 +88,18 @@ class Block:
         next_block.prev = self
 
         return next_block
+
+    def add_child(self, id, date, data = ''):
+        child = Block(id, date, self.get_hash())
+        child.gen_hash(update = True)
+
+        self.children.append(child)
+        child.prev = self
+
+        return child
+
+    def get_children(self):
+        return self.children
 
     def get_next(self):
         return self.next
