@@ -32,6 +32,13 @@ class TestBlock(unittest.TestCase):
 
         self.assertEqual(output, self.hash, "Should be '%s'" % self.hash)
 
+    def test_genesis(self):
+
+        the_block = vuln_chain.Block('id', 0, None)
+        the_block.gen_hash(update=True)
+
+        self.assertEqual(the_block.get_prev(), None)
+
     def test_verify(self):
 
         self.assertTrue(self.the_block.verify())

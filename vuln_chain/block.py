@@ -41,7 +41,10 @@ class Block:
         # Let's just convert the date to a string
         sha.update(bytearray(str(self.date), 'utf8'))
         sha.update(bytearray(str(self.data), 'utf8'))
-        sha.update(bytearray(self.previous_hash, 'utf8'))
+
+        # only the genesis block should be none
+        if self.previous_hash is not None:
+            sha.update(bytearray(self.previous_hash, 'utf8'))
 
         if update is True:
             self.hash = sha.hexdigest()
