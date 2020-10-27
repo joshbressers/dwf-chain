@@ -18,6 +18,21 @@ class Block:
         self.prev = None
         self.next = None
 
+    def __eq__(self, other):
+
+        if self.id != other.id:
+            return False
+        if self.date != other.date:
+            return False
+        if self.data != other.data:
+            return False
+        if self.previous_hash != other.previous_hash:
+            return False
+        if self.hash != other.hash:
+            return False
+
+        return True
+
     def get_date(self):
         return self.date
 
@@ -140,3 +155,13 @@ class Block:
             current_block = current_block.get_prev()
 
         return current_block
+
+
+def load_json(the_json):
+
+
+    the_data = json.loads(the_json)
+
+    a_block = Block(the_data['id'], the_data['date'], the_data['previous_hash'], the_data['hash'], the_data['data'])
+
+    return a_block

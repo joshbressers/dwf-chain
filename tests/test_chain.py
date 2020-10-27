@@ -26,6 +26,12 @@ class TestBlock(unittest.TestCase):
         self.assertEqual(the_block.get_prev_hash(), 'prev_hash', "Should be 'prev_hash'")
         self.assertEqual(the_block.get_hash(), 'hash', "Should be 'hash'")
 
+    def test_equal(self):
+        block_one = vuln_chain.Block('id', 0, 'prev_hash', 'hash')
+        block_two = vuln_chain.Block('id', 0, 'prev_hash', 'hash')
+
+        self.assertEqual(block_one, block_two)
+
     def test_hash(self):
 
         output = self.the_block.gen_hash()
@@ -127,7 +133,6 @@ class TestBlock(unittest.TestCase):
 
     def test_save(self):
 
-
         expected_output = '{"id": "id", "date": 0, "data": "", "hash": "ec81332e528ff522bfb05e93cd826c075ec26c5b9cc5bfcf7087d6f28da90e1d4f44df2a9af32573df5ab535d4b985731001c71d9f7629170518bba95280ef3d", "previous_hash": "prev_hash"}'
 
         the_block = self.the_block
@@ -135,6 +140,16 @@ class TestBlock(unittest.TestCase):
         output = the_block.get_json()
 
         self.assertEqual(expected_output, output)
+
+    def test_load(self):
+
+        input = '{"id": "id", "date": 0, "data": "", "hash": "ec81332e528ff522bfb05e93cd826c075ec26c5b9cc5bfcf7087d6f28da90e1d4f44df2a9af32573df5ab535d4b985731001c71d9f7629170518bba95280ef3d", "previous_hash": "prev_hash"}'
+
+        load_block = vuln_chain.load_json(input)
+
+        the_block = self.the_block
+
+        self.assertEqual(load_block, the_block)
 
 if __name__ == '__main__':
     unittest.main()
