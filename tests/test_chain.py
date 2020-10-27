@@ -125,6 +125,17 @@ class TestBlock(unittest.TestCase):
 
         self.assertEqual(first_block, the_block)
 
+    def test_save(self):
+
+
+        expected_output = '{"id": "id", "date": 0, "data": "", "hash": "ec81332e528ff522bfb05e93cd826c075ec26c5b9cc5bfcf7087d6f28da90e1d4f44df2a9af32573df5ab535d4b985731001c71d9f7629170518bba95280ef3d", "previous_hash": "prev_hash"}'
+
+        the_block = self.the_block
+
+        output = the_block.get_json()
+
+        self.assertEqual(expected_output, output)
+
 if __name__ == '__main__':
     unittest.main()
 

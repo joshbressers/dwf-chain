@@ -2,6 +2,7 @@
 #
 
 import hashlib
+import json
 
 class Block:
 
@@ -51,6 +52,22 @@ class Block:
 
         return sha.hexdigest()
 
+    def get_json(self):
+
+        # Make sure the hash exists
+        self.gen_hash(update=True)
+
+        to_dump = {}
+        to_dump['id'] = self.id
+        to_dump['date'] = self.date
+        to_dump['data'] = self.data
+        to_dump['hash'] = self.hash
+        if self.previous_hash is None:
+            to_dump['previous_hash'] = ''
+        else:
+            to_dump['previous_hash'] = self.previous_hash
+
+        return json.dumps(to_dump)
 
     def verify(self, all=False):
 
