@@ -113,6 +113,18 @@ class TestBlock(unittest.TestCase):
         self.assertIn(second_child, second_block.get_children())
         self.assertIn(third_child, third_block.get_children())
 
+    def test_get_first(self):
+
+        the_block = self.the_block
+        the_time = time.time()
+
+        second_block = the_block.add_next('id2', the_time, data = "Secret data2")
+        third_block = second_block.add_next('id3', the_time, data = "Secret data3")
+
+        first_block = third_block.get_genesis()
+
+        self.assertEqual(first_block, the_block)
+
 if __name__ == '__main__':
     unittest.main()
 

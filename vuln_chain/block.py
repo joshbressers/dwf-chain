@@ -109,3 +109,17 @@ class Block:
 
     def get_prev(self):
         return self.prev
+
+    def get_genesis(self):
+
+        current_block = self
+
+        while(True):
+
+            # If we hit the None block, we made it to the beginning
+            if current_block.get_prev() is None:
+                break
+
+            current_block = current_block.get_prev()
+
+        return current_block
