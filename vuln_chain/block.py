@@ -18,6 +18,9 @@ class Block:
         self.prev = None
         self.next = None
 
+        if self.previous_hash is None:
+            self.previous_hash = ''
+
     def __eq__(self, other):
 
         if self.id != other.id:
@@ -32,6 +35,9 @@ class Block:
             return False
 
         return True
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
 
     def get_date(self):
         return self.date

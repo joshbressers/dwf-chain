@@ -157,8 +157,10 @@ class TestBlock(unittest.TestCase):
 
         block1 = vuln_chain.Block('id', 0, 'prev_hash', self.hash)
         block2 = vuln_chain.Block('id', 0, 'prev_hash', self.hash)
+        block3 = vuln_chain.Block('id2', 0, 'prev_hash', self.hash)
 
         self.assertEqual(block1, block2)
+        self.assertNotEqual(block1, block3)
 
 if __name__ == '__main__':
     unittest.main()
