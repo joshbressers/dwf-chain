@@ -151,6 +151,15 @@ class TestBlock(unittest.TestCase):
 
         self.assertEqual(load_block, the_block)
 
+    def test_equal(self):
+
+        the_hash = "ec81332e528ff522bfb05e93cd826c075ec26c5b9cc5bfcf7087d6f28da90e1d4f44df2a9af32573df5ab535d4b985731001c71d9f7629170518bba95280ef3d"
+
+        block1 = vuln_chain.Block('id', 0, 'prev_hash', self.hash)
+        block2 = vuln_chain.Block('id', 0, 'prev_hash', self.hash)
+
+        self.assertEqual(block1, block2)
+
 if __name__ == '__main__':
     unittest.main()
 
