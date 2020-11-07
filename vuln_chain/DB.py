@@ -17,12 +17,22 @@ class DB:
 
     def add_chain(self, the_chain):
 
+        if not the_chain.verify():
+            raise Exception("The chain failed to verify")
+
         the_block = the_chain.get_genesis()
 
         while(True):
 
-            self.db[the_block.id] = the_block.get_json()
-            self.db[the_block.get_hash()] = the_block.get_id()
+            # We add these identifiers to avoid any possible collisions
+            # where id is the same as a valid hash
+            store_id = "id:" + the_block.get_id()
+            store_hash = "hash:" + the_block.get_hash()
+
+            self.db[store_id] = the_block.get_json()
+
+            # We also need to store a mapping from the hash to the ID
+            self.db[store_hash] = the_block.get_id()
 
             the_block = the_block.get_next()
             if the_block is None:
@@ -34,10 +44,14 @@ class DB:
 
     def load_by_id(self, block_id):
 
-        the_block = load_json(self.db[block_id])
+        store_id = "id:" + block_id
+
+        the_block = load_json(self.db[store_id])
         return the_block
 
     def load_by_hash(self, block_hash):
 
-        the_id = self.db[block_hash]
+        store_hash = "hash:" + block_hash
+        the_id = self.db[store_hash]
+
         return self.load_by_id(the_id)

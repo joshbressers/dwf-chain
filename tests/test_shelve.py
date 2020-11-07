@@ -15,11 +15,9 @@ class TestShelve(unittest.TestCase):
 
     def setUp(self):
 
-        self.hash = "ec81332e528ff522bfb05e93cd826c075ec26c5b9cc5bfcf7087d6f28da90e1d4f44df2a9af32573df5ab535d4b985731001c71d9f7629170518bba95280ef3d"
-
         the_time = time.time()
 
-        self.the_block = vuln_chain.Block('id', 0, None, self.hash)
+        self.the_block = vuln_chain.Block('id', 0, None)
         self.second_block = self.the_block.add_next('id2', the_time, data = "Secret data2")
         self.third_block = self.second_block.add_next('id3', the_time, data = "Secret data3")
 
@@ -47,8 +45,13 @@ class TestShelve(unittest.TestCase):
 
         # Read in a block
         a_block = the_db.load_by_id(self.the_block.get_id())
-
         self.assertEqual(a_block, self.the_block)
+
+        a_block = the_db.load_by_id(self.second_block.get_id())
+        self.assertEqual(a_block, self.second_block)
+
+        a_block = the_db.load_by_id(self.third_block.get_id())
+        self.assertEqual(a_block, self.third_block)
 
     def test_lookup_hash(self):
 

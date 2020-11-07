@@ -21,6 +21,9 @@ class Block:
         if self.previous_hash is None:
             self.previous_hash = ''
 
+        if self.hash is None:
+            self.gen_hash(True)
+
     def __eq__(self, other):
 
         if self.id != other.id:
