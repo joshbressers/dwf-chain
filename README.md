@@ -1,42 +1,37 @@
-# dwf-chain
+# vuln-chain
 A chain of vulnerability info
 
 Someday this will have more things, but CVE info is an easy place ot start as it's very public and very JSON
 
+The idea is there will be no "official" chain. Every user adds a link to
+chains of their choosing. There will also be no p2p network. All imported
+chains are read only. Any block can refer to any other block and be viewed
+as a way to enrich their data.
+
+For example we could have a CVE chain and an NVD chain. The NVD chain can
+include new details for different CVD IDs. How we incorporate the new and
+old data may be a challenge. An example below
+
+CVE-1900-0001v1 -----> CVE-1900-0001v2
+       ^
+       |
+    NVD-1900-0001
+
+How should the data look after we apply the v2 update and the new NVD data?
+
 # The chain
 
-There will be a primary chain. Every block on the main chain will have a
-child chain. Everything will be json data.
+There is no primary chain, this shold be viewed as a collection of
+arbitrary chains. A block can be pointed to by any other block. Every chain
+has a specific sequence of blocks, but those blocks may refer to other
+blocks on any chain. Everything will be json data.
 
-The primary chain will contain
+Every block will contain
 
 id
 date
 previous
 hash
-
-The child chains can contain anything.
-
-ID ----> ID ----> ID
-         \        \
-          \        -> Data
-           -> Data
-
-Every block can have multiple children. We can have a system where every
-vuln type has a "root" block that's tied to the primary chain. Then every
-vuln database is part of its own chain. Every block can multiple children
-
-For example
-
-CVE-1 -> child metadata -> more metadata
- |   \
- |    \ --- child metadata
- v
-CVE-2
+data
 
 Everything can be easily traced back to the root block for verification
-
-Maybe do something clever with signatures to specify which bits of metadata
-are associated wtih a specific group or person
-
-Store the public keys in a different tree
