@@ -99,20 +99,39 @@ class TestShelve(unittest.TestCase):
         self.assertEqual(a_block, self.the_block)
 
 
-#    def test_chain(self):
-#
-#        # Write the chain
-#        # Read the chain
-#        # Verify the chain
-#        # Check everything
-#        self.assertTrue(False)
-#
-#    def test_child(self):
-#
-#        # write a chain with chidren
-#        # Read it back in
-#        # Verify
-#        self.assertTrue(False)
+    def test_child(self):
+
+        tempdb = os.path.join(self.tempdir.name, 'test_db')
+
+        # Open DB
+        the_db = vuln_chain.DB(tempdb)
+
+        # Write chain
+        the_db.add_chain(self.the_block)
+
+        # add some children
+        child1 = vuln_chain.Block('child1', 0, None, parent = self.the_block)
+        child2 = vuln_chain.Block('child2', 0, None, parent = self.the_block)
+        child3 = vuln_chain.Block('child3', 0, None, parent = self.the_block)
+
+        the_db.add_block(child1)
+        the_db.add_block(child2)
+        the_db.add_block(child3)
+
+        # Close the DB
+        the_db.close()
+
+        # Open the DB
+        the_db = vuln_chain.DB(tempdb)
+
+        # Read in a block
+        child_blocks = the_db.load_by_parent(self.the_block.get_hash())
+
+        print(child_blocks)
+
+        self.assertTrue(child1 in child_blocks)
+        self.assertTrue(child2 in child_blocks)
+        self.assertTrue(child3 in child_blocks)
 
 if __name__ == '__main__':
     unittest.main()

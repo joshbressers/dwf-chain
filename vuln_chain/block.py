@@ -6,7 +6,7 @@ import json
 
 class Block:
 
-    def __init__(self, id, date, previous, hash = None, data = ''):
+    def __init__(self, id, date, previous, hash = None, data = '', parent = None):
         self.id = id
         self.date = date
         self.data = data
@@ -17,6 +17,11 @@ class Block:
 
         self.prev = None
         self.next = None
+
+        if parent is None:
+            self.parent = ''
+        else:
+            self.parent = parent.get_hash()
 
         if self.previous_hash is None:
             self.previous_hash = ''
@@ -67,9 +72,8 @@ class Block:
         sha.update(bytearray(str(self.date), 'utf8'))
         sha.update(bytearray(str(self.data), 'utf8'))
 
-        # only the genesis block should be none
-        if self.previous_hash is not None:
-            sha.update(bytearray(self.previous_hash, 'utf8'))
+        sha.update(bytearray(self.previous_hash, 'utf8'))
+        sha.update(bytearray(self.parent, 'utf8'))
 
         if update is True:
             self.hash = sha.hexdigest()
@@ -90,6 +94,7 @@ class Block:
             to_dump['previous_hash'] = ''
         else:
             to_dump['previous_hash'] = self.previous_hash
+        to_dump['parent'] = self.parent
 
         return json.dumps(to_dump)
 
@@ -153,6 +158,9 @@ class Block:
 
     def get_prev(self):
         return self.prev
+
+    def get_parent(self):
+        return self.parent
 
     def get_genesis(self):
 
