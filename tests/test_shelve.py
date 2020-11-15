@@ -53,6 +53,30 @@ class TestShelve(unittest.TestCase):
         a_block = the_db.load_by_id(self.third_block.get_id())
         self.assertEqual(a_block, self.third_block)
 
+    def test_write_block(self):
+
+        tempdb = os.path.join(self.tempdir.name, 'test_db')
+
+        # Open DB
+        the_db = vuln_chain.DB(tempdb)
+
+        # Write blocks
+        the_db.add_block(self.the_block)
+
+        # Close the DB
+        the_db.close()
+
+        # Open the DB
+        the_db = vuln_chain.DB(tempdb)
+
+        # Read in a block
+        a_block = the_db.load_by_id(self.the_block.get_id())
+        self.assertEqual(a_block, self.the_block)
+
+        with self.assertRaises(Exception) as context:
+            a_block = the_db.load_by_id(self.second_block.get_id())
+
+
     def test_lookup_hash(self):
 
         tempdb = os.path.join(self.tempdir.name, 'test_db')

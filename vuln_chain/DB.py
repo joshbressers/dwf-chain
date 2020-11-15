@@ -39,6 +39,21 @@ class DB:
                 # We're at the end
                 break
 
+    def add_block(self, the_block):
+
+        if not the_block.verify():
+            raise Exception("The block failed to verify")
+
+        # We add these identifiers to avoid any possible collisions
+        # where id is the same as a valid hash
+        store_id = "id:" + the_block.get_id()
+        store_hash = "hash:" + the_block.get_hash()
+
+        self.db[store_id] = the_block.get_json()
+
+        # We also need to store a mapping from the hash to the ID
+        self.db[store_hash] = the_block.get_id()
+
     def close(self):
         self.db.close()
 
