@@ -143,6 +143,9 @@ class Block:
         return child
 
     def get_children(self):
+        # This method is going to be dicey. How should we be tracking the
+        # children of a block? We should set a callback to find and load
+        # any potential children
         return self.children
 
     def get_next(self):
