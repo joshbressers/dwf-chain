@@ -13,7 +13,6 @@ class Block:
         self.previous_hash = previous
         self.hash = hash
         self.calculated_hash = None
-        self.children = []
 
         self.prev = None
         self.next = None
@@ -137,21 +136,6 @@ class Block:
         next_block.prev = self
 
         return next_block
-
-    def add_child(self, id, date, data = ''):
-        child = Block(id, date, self.get_hash())
-        child.gen_hash(update = True)
-
-        self.children.append(child)
-        child.prev = self
-
-        return child
-
-    def get_children(self):
-        # This method is going to be dicey. How should we be tracking the
-        # children of a block? We should set a callback to find and load
-        # any potential children
-        return self.children
 
     def get_next(self):
         return self.next
