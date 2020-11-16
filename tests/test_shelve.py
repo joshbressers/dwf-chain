@@ -11,7 +11,7 @@ import time
 import tempfile
 
 
-class TestShelve(unittest.TestCase):
+class TestDB(unittest.TestCase):
 
     def setUp(self):
 

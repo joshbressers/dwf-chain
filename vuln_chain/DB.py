@@ -1,10 +1,11 @@
 # This module is meant to be a driver that allows a blockchain to be saved
 # to disk or some other data storage destination.
 #
-# The default storage format is shelve because it's easy
+# The default storage format is dbm because it's easy
 #
 
-import shelve
+import os
+import dbm
 import json
 from .block import *
 
@@ -14,7 +15,10 @@ class DB:
 
         self.db_file = the_db
 
-        self.db = shelve.open(self.db_file)
+        if os.path.exists(self.db_file):
+            self.db = dbm.open(self.db_file)
+        else:
+            self.db = dbm.open(self.db_file, 'c')
 
     def add_chain(self, the_chain):
 
@@ -39,9 +43,9 @@ class DB:
 
         # We add these identifiers to avoid any possible collisions
         # where id is the same as a valid hash
-        store_id = "id:" + the_block.get_id()
-        store_hash = "hash:" + the_block.get_hash()
-        parent_hash = "parent:" + the_block.get_parent()
+        store_id = "id:%s" % the_block.get_id()
+        store_hash = "hash:%s" % the_block.get_hash()
+        parent_hash = "parent:%s" % the_block.get_parent()
 
         self.db[store_id] = the_block.get_json()
 
@@ -61,14 +65,18 @@ class DB:
 
     def load_by_id(self, block_id):
 
-        store_id = "id:" + block_id
+        # Sometimes we get bytes back
+        if type(block_id) is bytes:
+            block_id = block_id.decode()
+
+        store_id = "id:%s" % block_id
 
         the_block = load_json(self.db[store_id])
         return the_block
 
     def load_by_hash(self, block_hash):
 
-        store_hash = "hash:" + block_hash
+        store_hash = "hash:%s" % block_hash
         the_id = self.db[store_hash]
 
         return self.load_by_id(the_id)
@@ -77,7 +85,7 @@ class DB:
 
         found_blocks = []
 
-        parent_hash = "parent:" + parent_hash
+        parent_hash = "parent:%s" % parent_hash
         if parent_hash in self.db:
             the_ids = json.loads(self.db[parent_hash])
 
