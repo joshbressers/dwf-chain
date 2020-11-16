@@ -34,11 +34,14 @@ arbitrary chains. A block can be pointed to by any other block. Every chain
 has a specific sequence of blocks, but those blocks may refer to other
 blocks on any chain. Everything will be json data.
 
+All blocks will be stored in one central database for easy lookups.
+
 Every block will contain
 
 id
-The id is not unique. For example there could be multiple blocks with the
-same id representing updates to the original vulnerability
+The id is unique, but not requried. If a bock specifies an ID, no other
+block may have the same ID. For related blocks (for example an update to a
+certain CVE ID), we will use the parent/child relationship
 
 date
 This should be the date the data was updated. It can be in the past.
